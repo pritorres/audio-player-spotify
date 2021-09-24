@@ -1,46 +1,33 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
-const PlayList = () => {
-	const baseUrl = "https://assets.breatheco.de/apis/sound";
-	const [canciones, setCanciones] = useState([]);
-	const cancionActual = useRef("");
-	const setCancionActual = url => {
-		cancionActual.current.src = `${baseUrl}/${url}`;
-	};
-
-	const loadSongs = () => {
-		fetch(`${baseUrl}/all`, {
-			mode: "cors",
-			headers: { "Content-Type": "application/json" }
-		})
-			.then(response => response.json())
-			.then(response => {
-				setCanciones(response["data/songs.json"]);
-			});
-	};
-
-	useEffect(() => {
-		loadSongs();
-	}, []);
+const PlayList = props => {
+	const { canciones, setCancionActual, cancionActual } = props;
 
 	return (
 		<div>
 			<ol>
 				{canciones.map((cancion, index) => (
 					<li
+						className={
+							cancion.id === cancionActual?.id ? "active" : ""
+						}
 						key={index}
 						onClick={() => {
-							setCancionActual(cancion.url);
+							setCancionActual(cancion);
 						}}>
 						{cancion.name}
 					</li>
 				))}
 			</ol>
-			<audio ref={cancionActual} autoPlay />
 		</div>
 	);
 };
 
-PlayList.prototype = {};
+PlayList.propTypes = {
+	canciones: PropTypes.array,
+	setCancionActual: PropTypes.func,
+	cancionActual: PropTypes.object
+};
+
 export default PlayList;
