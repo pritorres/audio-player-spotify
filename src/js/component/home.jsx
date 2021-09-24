@@ -8,9 +8,9 @@ import Footer from "./footer.js";
 const Home = () => {
 	return (
 		<>
-			<div className="container-fluid">
+			<div className="container">
 				<PlayList />
-				<Footer back="retroceder" play="play" next="next" />
+				<Footer back="" play="" next="" />
 			</div>
 		</>
 	);

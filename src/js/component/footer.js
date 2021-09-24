@@ -3,10 +3,16 @@ import PropTypes from "prop-types";
 
 const Footer = props => {
 	return (
-		<footer className="bg-dark text-center text-lg-start text-light">
-			<button>{props.back}</button>
-			<button>{props.play}</button>
-			<button>{props.next}</button>
+		<footer className="footer text-center text-lg-start text-light">
+			<spam>
+				<i className="fas fa-chevron-circle-left m-1">{props.back}</i>
+			</spam>
+			<spam>
+				<i className="fas fa-play-circle m-1">{props.play}</i>
+			</spam>
+			<spam>
+				<i className="fas fa-chevron-circle-right m-1">{props.next}</i>
+			</spam>
 		</footer>
 	);
 };
