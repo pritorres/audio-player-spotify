@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import PlayList from "./PlayList.js";
 import Footer from "./footer.js";
 
-//create your first component
 const Home = () => {
 	const baseUrl = "https://assets.breatheco.de/apis/sound";
 	const [canciones, setCanciones] = useState([]);
+	const [cancionActualIndex, setCancionActualIndex] = useState(null);
 	const [cancionActual, setCancionActual] = useState();
-
+	const [active, setACtive] = useState(null);
 	const audioRef = useRef(null);
+	const [error, setError] = useState("");
 
 	const loadSongs = () => {
 		fetch(`${baseUrl}/all`, {
@@ -17,23 +18,84 @@ const Home = () => {
 		})
 			.then(response => response.json())
 			.then(response => {
-				setCanciones(response["data/songs.json"]);
+				setCanciones(
+					response["data/songs.json"].map((elemt, index) => ({
+						...elemt,
+						id: index
+					}))
+				);
 			});
 	};
 
+	const MyFuncion = (cancionActual, indice) => {
+		setCancionActual(cancionActual);
+		setCancionActualIndex(indice);
+		setACtive(true);
+	};
+
+	const pauseMusic = () => {
+		setACtive(false);
+		audioRef.current.pause();
+	};
+
+	const playMusic = () => {
+		setACtive(true);
+		audioRef.current.play();
+	};
+	const nextMusic = () => {
+		const nextIndex = cancionActualIndex + 1;
+		if (nextIndex < canciones.length) {
+			setCancionActual(canciones[nextIndex]);
+			setCancionActualIndex(nextIndex);
+		} else if (nextIndex >= canciones.length) {
+			setCancionActual(canciones[0]);
+			setCancionActualIndex(0);
+		}
+	};
+	const backMusic = () => {
+		const nextIndex = cancionActualIndex - 1;
+		if (nextIndex < canciones.length) {
+			setCancionActual(canciones[nextIndex]);
+			setCancionActualIndex(nextIndex);
+		} else if (nextIndex == canciones.length) {
+			console.log("llego");
+			setCancionActual(canciones[0]);
+			setCancionActualIndex(0);
+		}
+	};
+	useEffect(() => {
+		if (cancionActual) {
+			audioRef.current.src = `${baseUrl}/${cancionActual.url}`;
+			audioRef.current.play();
+			setError("");
+		}
+	}, [cancionActual]);
+
 	useEffect(() => {
 		loadSongs();
+		audioRef.current.onerror = e => {
+			setError("cancion no encontrada");
+		};
 	}, []);
 	return (
 		<>
 			<div className="container">
 				<PlayList
 					canciones={canciones}
-					setCancionActual={setCancionActual}
+					setCancionActual={MyFuncion}
 					cancionActual={cancionActual}
 				/>
-				<Footer back="" play="" next="" />
-				{!!cancionActual && <audio ref={audioRef} autoPlay />}
+				<Footer
+					pauseMusic={pauseMusic}
+					playMusic={playMusic}
+					setACtive={setACtive}
+					active={active}
+					nextMusic={nextMusic}
+					backMusic={backMusic}
+				/>
+				{error}
+
+				<audio ref={audioRef} />
 			</div>
 		</>
 	);

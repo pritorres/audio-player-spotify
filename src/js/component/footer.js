@@ -2,39 +2,45 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Footer = props => {
-	const { back, play, next } = props;
+	const { pauseMusic, playMusic, nextMusic, active, backMusic } = props;
 
 	return (
 		<footer className="footer text-center text-lg-start text-light">
 			<span>
 				<i
 					className="fas fa-chevron-circle-left m-1"
-					onClick={() => {
-						back;
-					}}></i>
+					onClick={backMusic}></i>
 			</span>
-			<span>
-				<i
-					className="play fas fa-play-circle m-1"
-					onClick={() => {
-						play;
-					}}></i>
-			</span>
+
+			{active && (
+				<span>
+					<i
+						className="fas fa-pause-circle m-1"
+						onClick={pauseMusic}></i>
+				</span>
+			)}
+			{!active && (
+				<span>
+					<i
+						className="play fas fa-play-circle m-1"
+						onClick={playMusic}></i>
+				</span>
+			)}
 			<span>
 				<i
 					className="fas fa-chevron-circle-right m-1"
-					onClick={() => {
-						next;
-					}}></i>
+					onClick={nextMusic}></i>
 			</span>
 		</footer>
 	);
 };
 
 Footer.propTypes = {
-	back: PropTypes.string,
-	play: PropTypes.string,
-	next: PropTypes.string
+	pauseMusic: PropTypes.func,
+	playMusic: PropTypes.func,
+	nextMusic: PropTypes.func,
+	active: PropTypes.bool,
+	backMusic: PropTypes.func
 };
 
 export default Footer;

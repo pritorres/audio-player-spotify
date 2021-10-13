@@ -10,11 +10,11 @@ const PlayList = props => {
 				{canciones.map((cancion, index) => (
 					<li
 						className={
-							cancion.id === cancionActual?.id ? "active" : ""
+							cancionActual?.id == cancion.id ? "active" : ""
 						}
 						key={index}
 						onClick={() => {
-							setCancionActual(cancion);
+							setCancionActual(cancion, index);
 						}}>
 						{cancion.name}
 					</li>
