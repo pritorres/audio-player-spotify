@@ -53,16 +53,18 @@ const Home = () => {
 		}
 	};
 	const backMusic = () => {
-		const nextIndex = cancionActualIndex - 1;
-		if (nextIndex < canciones.length) {
-			setCancionActual(canciones[nextIndex]);
-			setCancionActualIndex(nextIndex);
-		} else if (nextIndex == canciones.length) {
-			console.log("llego");
-			setCancionActual(canciones[0]);
-			setCancionActualIndex(0);
+		const prevIndex = cancionActualIndex - 1;
+		console.log(prevIndex);
+		if (prevIndex > -1) {
+			setCancionActual(canciones[prevIndex]);
+			setCancionActualIndex(prevIndex);
+		} else {
+			const ultimoIndex = canciones.length - 1;
+			setCancionActual(canciones[ultimoIndex]);
+			setCancionActualIndex(ultimoIndex);
 		}
 	};
+
 	useEffect(() => {
 		if (cancionActual) {
 			audioRef.current.src = `${baseUrl}/${cancionActual.url}`;
